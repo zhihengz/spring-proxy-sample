@@ -30,4 +30,27 @@ public class AccountServiceTest {
         accountService.create( 1L, account );
         assertNotNull( accountService.read( 1L ) );
     }
+
+    @Test
+    public void testFindByName() {
+
+        for ( int i = 0; i < 2; i++ ) {
+            Account account = new Account();
+            account.setName( "jason" );
+            accountService.create( new Long( i ), account );
+        }
+        assertEquals( 2, accountService.findByName( "jason" ).size() );
+    }
+
+    @Test
+    public void testFindByAge() {
+
+        for ( int i = 0; i < 2; i++ ) {
+            Account account = new Account();
+            account.setName( "jason" );
+            account.setAge( i + 10 );
+            accountService.create( new Long( i ), account );
+        }
+        assertEquals( 1, accountService.findByAge( 10 ).size() );
+    }
 }

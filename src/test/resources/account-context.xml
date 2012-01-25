@@ -6,16 +6,34 @@
                            ">
 
   <bean id="abstractCRUDTarget"
-        class="sandbox.GenericCRUDServiceImpl" abstract="true"/>
-
-  <bean id="abstractCRUD"
-        class="org.springframework.aop.framework.ProxyFactoryBean"
-        abstract="true"/>
+        class="sandbox.GenericCRUDServiceImpl" abstract="true" init-method="init">
+  </bean>
 
   <bean id="accountService" parent="abstractCRUD">
     <property name="proxyInterfaces" value="sandbox.account.AccountService"/>
     <property name="target">
-      <bean parent="abstractCRUDTarget"/>
+      <bean parent="abstractCRUDTarget">
+        <constructor-arg value="sandbox.account.Account"/>
+      </bean>
     </property>
   </bean>
+
+  <bean id="finderIntroductionAdvisor"
+	class="org.springframework.aop.support.DefaultIntroductionAdvisor">
+    <constructor-arg ref="finderIntroductionInterceptor"/>
+  </bean>
+
+  <bean id="finderIntroductionInterceptor"
+	class="sandbox.FinderIntroductionInterceptor"/>
+
+  <bean id="abstractCRUD"
+        class="org.springframework.aop.framework.ProxyFactoryBean"
+        abstract="true">
+    <property name="interceptorNames">
+      <list>
+        <value>finderIntroductionAdvisor</value>
+      </list>
+    </property>
+  </bean>
+
 </beans>

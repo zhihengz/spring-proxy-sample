@@ -12,8 +12,9 @@ care about what domain object T and primary key K it is.
 object.
 
 We are using spring `ProxyFactoryBean` to create a proxy to bridge call on
-`AccountService` to `GenericCRUDServiceImpl`, of cause we actually can add
-method interceptor to provide more operation.
+`AccountService` to `GenericCRUDServiceImpl`, A finder method interceptor
+is injected so that we can provide findByXXX functions where XXX is the
+bean property name
 
 `account-context.xml` is spring context to wire up everything.
 
